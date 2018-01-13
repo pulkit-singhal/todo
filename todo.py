@@ -2,6 +2,7 @@
 import sqlite3
 import sys
 import argparse
+import textwrap
 from itertools import chain, repeat
 
 class ASCIITable(object):
@@ -65,7 +66,10 @@ class TodoService(object):
 		c = self.connection.cursor()
 		c.execute("SELECT * FROM todos")
 		for row in c:
-			asciiTable.add_row([row[0], row[1]])
+			wrapped_task = textwrap.wrap(row[1])
+			asciiTable.add_row([row[0], wrapped_task[0]])
+			for i in range(1, len(wrapped_task)):
+				asciiTable.add_row(['', wrapped_task[i]])
 		print(asciiTable)
 
 	def close(self):
